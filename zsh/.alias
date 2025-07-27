@@ -1,0 +1,13 @@
+alias dev="npm run dev"
+alias start="npm run start"
+alias preview="npm run preview"
+alias build="npm run build"
+alias cls="clear"
+
+alias ls='eza'
+
+alias ll='eza -l'
+alias la='eza -la'
+alias lt='eza -T'
+alias ltp='eza -T --ignore-glob="node_modules|.git|dist|vendor"'
+alias lg='eza -l --git'

@@ -1,0 +1,86 @@
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	yazi "$@" --cwd-file="$tmp"
+	if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		builtin cd -- "$cwd"
+	fi
+	rm -f -- "$tmp"
+}
+
+tunnel() {
+  local port=${1:-3000}
+  cloudflared tunnel --url "http://localhost:$port"
+}
+
+n() {
+  local port=${1:-3000}
+  ngrok http http://localhost:$port
+}
+
+function docker-start() {
+  docker start $(docker ps -a --format "{{.ID}}\t{{.Names}}" | fzf -m | awk '{print $1}')
+}
+
+function docker-stop() {
+  docker stop $(docker ps -a --format "{{.ID}}\t{{.Names}}" | fzf -m | awk '{print $1}')
+}
+
+function docker-rm() {
+  docker rm $(docker ps -a --format "{{.ID}}\t{{.Names}}" | fzf -m | awk '{print $1}')
+}
+
+function docker-exec() {
+  local terminal=${1:-bash}
+  docker exec -it $(docker ps -a --format "{{.ID}}\t{{.Names}}" | fzf | awk '{print $1}') $terminal
+}
+
+function docker-logs() {
+  docker logs -f $(docker ps -a --format "{{.ID}}\t{{.Names}}" | fzf | awk '{print $1}')
+}
+
+function docker-images() {
+  docker images --format "{{.Repository}}\t{{.ID}}\t{{.Tag}}" | fzf | awk '{print $1}'
+}
+
+# Git command alias
+function git-branch() {
+  git branch -a |
+    sed 's/^..//' |
+    sed 's#remotes/origin/##' |
+    sort -u |
+    fzf
+}
+
+function git-switch() {
+  local branch=$(git-branch)
+  if [[ -n "$branch" ]]; then
+    git switch "$branch"
+  else
+    echo "❌ No branch selected."
+  fi
+}
+
+function git-commit() {
+  git commit -m $(git log --oneline | fzf | awk '{print $1}')
+}
+
+function delete-local-branch() {
+  local branch="dev|staging|development|sit|uat|prod|production|main|master"
+  git branch -D $(git branch --merged | grep -v "$branch" | fzf --multi --preview="git log --oneline {}")
+}
+
+function delete-local-branch-all() {
+  git branch --format="%(refname:short)" | grep -vE "dev|staging|development|sit|uat|prod|production|main|master" | xargs -n 1 echo
+}
+
+function delete-remote-branch-all() {
+  for branch in $(
+    git branch -r --format="%(refname:short)" |
+    grep -vE "dev|staging|development|sit|uat|prod|production|main|master" |
+    sed 's/origin\///' |
+    grep -vE "origin"
+  ); do
+    echo "$branch"
+    # git push origin --delete "$branch"
+  done
+}

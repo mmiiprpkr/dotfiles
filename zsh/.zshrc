@@ -70,25 +70,22 @@ ZSH_THEME="robbyrussell"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
-
-# Custom plugin path (โหลด plugin ถ้าอยู่ใน ~/.zsh/plugins)
-ZSH_CUSTOM="$HOME/.zsh"
-
-# zsh-autosuggestions
-if [ -f "$ZSH_CUSTOM/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh" ]; then
-  source "$ZSH_CUSTOM/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
-fi
-
-# zsh-syntax-highlighting
-if [ -f "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]; then
-  source "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
-fi
+plugins=(
+  git
+  zsh-autosuggestions
+  zsh-syntax-highlighting
+  zsh-history-substring-search
+  zsh-autopair
+  fzf-tab
+)
 
 source $ZSH/oh-my-zsh.sh
 
 # zsh-completions
-fpath+=~/.zsh/zsh-completions/src
+fpath+=~/.oh-my-zsh/custom/plugins/zsh-completions/src
+
+# zoxide
+eval "$(zoxide init zsh)"
 
 # User configuration
 
@@ -119,149 +116,6 @@ fpath+=~/.zsh/zsh-completions/src
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-export NVM_DIR=~/.nvm
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-
-
-# bun completions
-[ -s "/Users/peerapat.krai/.bun/_bun" ] && source "/Users/peerapat.krai/.bun/_bun"
-
-# bun
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
-
-# pnpm
-export PNPM_HOME="/Users/peerapat.krai/Library/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-# pnpm end
-
-# Go development
-export PATH="$PATH:$(go env GOPATH)/bin"
-
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="$HOME/.sdkman"
-[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
-
-# Added by Windsurf
-export PATH="/Users/peerapat.krai/.codeium/windsurf/bin:$PATH"
-
-alias dev="npm run dev"
-alias start="npm run start"
-alias preview="npm run preview"
-alias build="npm run build"
-alias cls="clear"
-
-alias ls='eza'
-
-alias ll='eza -l'
-alias la='eza -la'
-alias lt='eza -T'
-alias ltp='eza -T --ignore-glob="node_modules|.git|dist|vendor"'
-alias lg='eza -l --git'
-alias gs='git switch $(git branch -a | fzf)'
-
-alias astro="cd /Users/peerapat.krai/Developer/astrosolutions"
-alias pre="cd /Users/peerapat.krai/Developer/astrosolutions/premium-service-project"
-alias mmii="cd /Users/peerapat.krai/Developer/mmiiprpkr"
-
-tunnel() {
-  local port=${1:-3000}
-  cloudflared tunnel --url "http://localhost:$port"
-}
-
-n() {
-  local port=${1:-3000}
-  ngrok http http://localhost:$port
-}
-
-
-function y() {
-	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
-	yazi "$@" --cwd-file="$tmp"
-	if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
-		builtin cd -- "$cwd"
-	fi
-	rm -f -- "$tmp"
-}
-
-eval "$(zoxide init zsh)"
-export EDITOR='code'
-export  GO_CLI_DB="postgres://postgres:postgres@localhost:5433/go-env-cli?sslmode=disable"
-# export  GO_CLI_DB="postgresql://neondb_owner:npg_1fVWATwEmQa5@ep-weathered-shadow-a5uvy0ie-pooler.us-east-2.aws.neon.tech/neondb?sslmode=require"
-autoload -U compinit; compinit
-
-# Added by Windsurf
-export PATH="/Users/peerapat.krai/.codeium/windsurf/bin:$PATH"
-
-# Docker command alias
-function docker-start() {
-  docker start $(docker ps -a --format "{{.ID}}\t{{.Names}}" | fzf -m | awk '{print $1}')
-}
-
-function docker-stop() {
-  docker stop $(docker ps -a --format "{{.ID}}\t{{.Names}}" | fzf -m | awk '{print $1}')
-}
-
-function docker-rm() {
-  docker rm $(docker ps -a --format "{{.ID}}\t{{.Names}}" | fzf -m | awk '{print $1}')
-}
-
-function docker-exec() {
-  local terminal=${1:-bash}
-  docker exec -it $(docker ps -a --format "{{.ID}}\t{{.Names}}" | fzf | awk '{print $1}') $terminal
-}
-
-function docker-logs() {
-  docker logs -f $(docker ps -a --format "{{.ID}}\t{{.Names}}" | fzf | awk '{print $1}')
-}
-
-function docker-images() {
-  docker images --format "{{.Repository}}\t{{.ID}}\t{{.Tag}}" | fzf | awk '{print $1}'
-}
-
-# Git command alias
-function git-branch() {
-  git branch -a |
-    sed 's/^..//' |
-    sed 's#remotes/origin/##' |
-    sort -u |
-    fzf
-}
-
-function git-switch() {
-  local branch=$(git-branch)
-  if [[ -n "$branch" ]]; then
-    git switch "$branch"
-  else
-    echo "❌ No branch selected."
-  fi
-}
-
-function git-commit() {
-  git commit -m $(git log --oneline | fzf | awk '{print $1}')
-}
-
-function delete-local-branch() {
-  local branch="dev|staging|development|sit|uat|prod|production|main|master"
-  git branch -D $(git branch --merged | grep -v "$branch" | fzf --multi --preview="git log --oneline {}")
-}
-
-function delete-local-branch-all() {
-  git branch --format="%(refname:short)" | grep -vE "dev|staging|development|sit|uat|prod|production|main|master" | xargs -n 1 echo
-}
-
-function delete-remote-branch-all() {
-  for branch in $(
-    git branch -r --format="%(refname:short)" |
-    grep -vE "dev|staging|development|sit|uat|prod|production|main|master" |
-    sed 's/origin\///' |
-    grep -vE "origin"
-  ); do
-    echo "$branch"
-    # git push origin --delete "$branch"
-  done
-}
+source "$HOME/dotfiles/zsh/.alias"
+source "$HOME/dotfiles/zsh/.exports"
+source "$HOME/dotfiles/zsh/.functions"

@@ -1,0 +1,27 @@
+export EDITOR="code --wait"
+
+# DB config (move to .env or local config for security)
+export GO_CLI_DB="postgres://postgres:postgres@localhost:5433/go-env-cli?sslmode=disable"
+
+# NVM
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+# bun completions
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+# pnpm
+export PNPM_HOME="$HOME/Library/pnpm"
+[[ ":$PATH:" != *":$PNPM_HOME:"* ]] && export PATH="$PNPM_HOME:$PATH"
+
+# Go development
+export PATH="$PATH:$(go env GOPATH)/bin"
+
+# SDKMAN
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]] && source "$SDKMAN_DIR/bin/sdkman-init.sh"

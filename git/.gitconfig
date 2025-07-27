@@ -1,0 +1,25 @@
+[user]
+	name = Peerapat Krairat
+	email = peerapat.krairat@gmail.com
+[init]
+	defaultBranch = main
+[user]
+    name = Peerapat Krairat
+    email = peerapat.krairat@gmail.com
+[core]
+    editor = code --wait
+[color]
+    ui = auto
+[diff]
+    tool = vscode
+[difftool "vscode"]
+    cmd = code --wait --diff $LOCAL $REMOTE
+[merge]
+    tool = vscode
+[mergetool "vscode"]
+    cmd = code --wait $MERGED
+    keepBackup = false
+[fetch]
+    prune = true
+[pull]
+	rebase = false

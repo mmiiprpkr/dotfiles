@@ -1,0 +1,27 @@
+tap "homebrew/services"
+tap "ngrok/ngrok"
+brew "bat"
+brew "clang-format"
+brew "cloudflared", restart_service: :changed
+brew "eza"
+brew "fd"
+brew "fzf"
+brew "git"
+brew "golangci-lint"
+brew "helm"
+brew "k6"
+brew "mysql", restart_service: :changed
+brew "nvm"
+brew "openssh"
+brew "pnpm"
+brew "postgresql@16", restart_service: :changed
+brew "protobuf"
+brew "redis"
+brew "ripgrep"
+brew "stow"
+brew "tree"
+brew "yarn"
+brew "yazi", args: ["HEAD"]
+brew "zig"
+brew "zoxide"
+cask "ngrok"

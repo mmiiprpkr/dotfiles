@@ -72,6 +72,8 @@ ZSH_THEME="robbyrussell"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
   git
+  docker
+  kubectl
   zsh-autosuggestions
   zsh-syntax-highlighting
   zsh-history-substring-search

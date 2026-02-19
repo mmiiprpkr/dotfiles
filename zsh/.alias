@@ -5,6 +5,7 @@ alias build="npm run build"
 alias cls="clear"
 
 alias ls='eza'
+alias at='antigravity'
 
 alias ll='eza -l'
 alias la='eza -la'

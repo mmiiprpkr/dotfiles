@@ -79,9 +79,13 @@ plugins=(
   zsh-history-substring-search
   zsh-autopair
   fzf-tab
+  rust
+  ruby
 )
 
 source $ZSH/oh-my-zsh.sh
+
+bindkey -v
 
 # zsh-completions
 fpath+=~/.oh-my-zsh/custom/plugins/zsh-completions/src
@@ -121,3 +125,23 @@ eval "$(zoxide init zsh)"
 source "$HOME/dotfiles/zsh/.alias"
 source "$HOME/dotfiles/zsh/.exports"
 source "$HOME/dotfiles/zsh/.functions"
+export PATH="$HOME/.dotnet:$PATH"
+
+# Created by `pipx` on 2025-10-07 08:01:24
+export PATH="$PATH:/Users/peerapat.krai/.local/bin"
+export PATH="$HOME/.local/bin:$PATH"
+
+# bun completions
+[ -s "/Users/peerapat.krai/.bun/_bun" ] && source "/Users/peerapat.krai/.bun/_bun"
+fpath=(~/.zsh/completions $fpath)
+autoload -U compinit && compinit
+export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
+export PATH="/usr/local/opt/ruby/bin:/usr/local/lib/ruby/gems/3.0.0/bin:$PATH"
+export PATH="$(ruby -r rubygems -e puts Gem.bindir):$PATH"
+
+export ANDROID_HOME=$HOME/Library/Android/sdk
+export PATH=$ANDROID_HOME/emulator:$ANDROID_HOME/platform-tools:$ANDROID_HOME/tools:$PATH
+export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$PATH
+
+# Added by Antigravity
+export PATH="/Users/peerapat.krai/.antigravity/antigravity/bin:$PATH"

@@ -3,9 +3,6 @@
 	email = peerapat.krairat@gmail.com
 [init]
 	defaultBranch = main
-[user]
-    name = Peerapat Krairat
-    email = peerapat.krairat@gmail.com
 [core]
     editor = code --wait
 [color]
@@ -23,3 +20,5 @@
     prune = true
 [pull]
 	rebase = false
+[push]
+	autoSetupRemote = true
